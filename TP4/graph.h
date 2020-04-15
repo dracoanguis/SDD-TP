@@ -3,14 +3,18 @@
 #include "liste.h"
 
 //def pour appelle double:
+
+//Un aéroport avec code iata, ville, pays.
 typedef struct Aeroport Aeroport;
+//Un Sommet du graph avec un aeroport, une liste de successeur, et une marque.
 typedef struct Sommet Sommet;
+//Un Successeur avec un sommet representer, un cout.
 typedef struct Successeur Successeur;
 
 //Un aéroport sans liste de liaisons:
 struct Aeroport
 {
-    char iata[5];//Code unique par aeroport on considèere ca comme son nom.
+    char iata[4];//Code unique par aeroport on considèere ca comme son nom.
     char ville[50];//Ville de localisation.
     char pays[50];//Pays de localisation.
 };
@@ -20,7 +24,6 @@ struct Successeur
 {
     Sommet* sommet_representer;//L'element qu'il représente.
     int cout;//Le cout du déplacement.
-    Successeur* prochain;//Prochain successeur possible de la liste.
 };
 
 //Elements du graph:
@@ -31,25 +34,47 @@ struct Sommet
     int marque;//S'il a été visité ou pas, 0 non, 1 oui.
 };
 
-
 //Fonctions d'initialisation de structure:
 
 //initilaise un aeroport contenant les données fourni et retourne sont pointeur.
-Aeroport* initialiserAeroport(char iata[5],char ville[50],char pays[50]);
+Aeroport* initialiserAeroport(char iata[4],char ville[50],char pays[50]);
+//Initilaise un sommet avec les données fournies (accepte une liste NULL et marque initialiser a 0) et retoune sont pointeur.
+Sommet* initialiserSommet(Aeroport* aeroport,Liste* successeurs);
+//Initialise un successeur a partir d'un Sommet et d'un cout.
+Successeur* initialiserSuccesseur(Sommet* sommet,int cout);
+
 
 //Fonctions d'affichage d'element:
 
 //Affiche les informations d'un aeroport.
 void afficherAeroport(Aeroport* aeroport);
+//Affiche les informations d'un sommet.
+void afficherSommet(Sommet* sommet);
+//Affiche les informations d'un successeur.
+void afficherSuccesseur(Successeur* successeur);
 
-//Fonctions d'afichage de liste:
+
+//Fonctions d'affichage de liste:
 
 //Affiche la liste des aeroports avec leurs informations.
 void afficherListe_Aeroport(Liste* liste);
+//Affiche la liste des successeurs avec leur informations.
+void afficherListe_Successeur(Liste* liste);
+//Affiche la liste des sommets avec leur informations.
+void afficherListe_Sommet(Liste* liste);
+
 
 //Fonctions de lecture de document:
 
 //Liste les aeroports a partir des informations du fichier.
 Liste* lectureAeroports(const char *faeroports);
+
+
+//Groupe de fonction pour fonction de création de liste successeur:
+
+//Cherche le Sommet representer par un successeur a partir du nom de celui-ci (code iata).
+Sommet* chercherSommet_Successeur(Liste* liste_sommet,char* nom);
+//Donne le Successeur a partir d'un bloc successeur (ex; "LHR.45").
+Successeur* lectureBlocSuccesseur(char* bloc, Liste* liste_sommet);
 
 #endif // !GRAPH_H

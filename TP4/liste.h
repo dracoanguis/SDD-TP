@@ -2,7 +2,9 @@
 #define LISTE_H
 
 //Definitions:
+//Element d'une liste qui contien un pointeur sur la donnée, et un vers l'element prochain.
 typedef struct Element Element;
+//Tete de la liste qui contient un pointeur vers le premier element.
 typedef struct Liste Liste;
 
 //Element d'une liste:

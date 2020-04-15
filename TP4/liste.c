@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "liste.h"
+#define memoryTest(pointeur) if (pointeur == NULL){printf("\nMemory allocation Failure !\n");exit(EXIT_FAILURE);}
 
 Liste* initialiserListe()
 {
@@ -23,11 +24,7 @@ void ajouterElementListe(Liste* liste,void* element)
 {
     Element* nouveau = malloc(sizeof(Element));
     Element* courrant = liste->premier;
-    if (nouveau == NULL)
-    {
-        printf("\nMemory allocation Failure!!!\n");
-        exit(EXIT_FAILURE);
-    }
+    memoryTest(nouveau);
 
     if (liste == NULL)
     {
