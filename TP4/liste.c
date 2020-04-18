@@ -8,12 +8,7 @@
 Liste* initialiserListe()
 {
     Liste* nouveau = malloc(sizeof(Liste));
-
-    if (nouveau == NULL)
-    {
-        printf("\nMemory allocation Failure!!!\n");
-        exit(EXIT_FAILURE);
-    }
+    memoryTest(nouveau);
 
     nouveau->premier = NULL;
 

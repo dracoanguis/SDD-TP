@@ -1,6 +1,7 @@
 #ifndef GRAPH_H
 #define GRAPH_H
 #include "liste.h"
+#include <stdio.h>
 
 //def pour appelle double:
 
@@ -36,7 +37,7 @@ struct Sommet
 
 //Fonctions d'initialisation de structure:
 
-//initilaise un aeroport contenant les données fourni et retourne sont pointeur.
+//Initilaise un aeroport contenant les données fourni et retourne sont pointeur.
 Aeroport* initialiserAeroport(char iata[4],char ville[50],char pays[50]);
 //Initilaise un sommet avec les données fournies (accepte une liste NULL et marque initialiser a 0) et retoune sont pointeur.
 Sommet* initialiserSommet(Aeroport* aeroport,Liste* successeurs);
@@ -68,13 +69,20 @@ void afficherListe_Sommet(Liste* liste);
 
 //Liste les aeroports a partir des informations du fichier.
 Liste* lectureAeroports(const char *faeroports);
+//Liste les sommets a partir des insformations du fichier.
+Liste* lectureSommets(const char* faeroports);
+//Inscrit les successeurs dans les liaisons de la liste de Sommet.
+void lectureSuccesseurs(const char* fsuccesseur,Liste* liste_sommet);
 
 
 //Groupe de fonction pour fonction de création de liste successeur:
 
 //Cherche le Sommet representer par un successeur a partir du nom de celui-ci (code iata).
 Sommet* chercherSommet_Successeur(Liste* liste_sommet,char* nom);
-//Donne le Successeur a partir d'un bloc successeur (ex; "LHR.45").
+//Donne le Successeur a partir d'un bloc successeur (ex: "LHR.45").
 Successeur* lectureBlocSuccesseur(char* bloc, Liste* liste_sommet);
-
+//Donne une liste de successeur a partir d'une ligne d'information en Bloc.
+Liste* lectureLigneSuccesseur(char ligne[], Liste* liste_sommet);
+//Lis une ligne dans un fichier.
+char* readline(FILE* file);
 #endif // !GRAPH_H
