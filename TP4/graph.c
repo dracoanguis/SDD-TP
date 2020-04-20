@@ -3,72 +3,38 @@
 #include <string.h>
 #include "graph.h"
 #include "liste.c"
+/*
+#define VARIABLE_SOMMET_DEF a ajouté et remplacé par les def des variables utiliser dans la lecture de doc
+#define FORME_SOMMET a ajouté et remplacé par la forme "..." du sommet correspondant aux variables
+#define VARIABLE_SOMMET_USE a ajouté et remplacé par les nom de var utiliser dans fichier sommet
+#define INNITIALISER_DATA a ajouté dans le fichier d'utilisation et remplacer par la fonction d'initialisation de data.
+#define AFFICHER_DATA a ajouté dans le fichier d'utilisation et remplacer par la fonction d'affichage de data.
+*/
+
 #define memoryTest(pointeur) if (pointeur == NULL){printf("\nMemory allocation Failure !\n");exit(EXIT_FAILURE);}
-#define nomSom(Sommet) Sommet->aeroport->iata
-#define nomSuc(Successeur) Successeur->nomSom(sommet_representer)
+#define nomSuc(Successeur) Successeur->sommet_representer->nom
 #define coutSuc(Successeur) Successeur->cout
 #define True 1
 #define False 0
 
-//Aeroports:
-
-Aeroport* initialiserAeroport(char iata[4],char ville[50],char pays[50])
-{
-    Aeroport *nouveau = malloc(sizeof(Aeroport));
-    memoryTest(nouveau);
-
-    strcpy(nouveau->iata, iata);
-    strcpy(nouveau->ville,ville);
-    strcpy(nouveau->pays, pays);
-
-    return nouveau;
-}
-
-void afficherAeroport(Aeroport* aeroport)
-{
-    if (aeroport == NULL)
-    {
-        printf("\nError: Trying to print an non-existant Aeroport !\n");
-        exit(EXIT_FAILURE);
-    }
-
-    printf("\n");
-    printf("Code Iata: %s\n",aeroport->iata);
-    printf("Ville: %s\n",aeroport->ville);
-    printf("Pays: %s\n",aeroport->pays);
-}
-
-void afficherListe_Aeroport(Liste* liste)
-{
-    if (liste == NULL || liste->premier == NULL)
-    {
-        printf("\nError: Trying to print a non-existant or empty Liste_Aeroport !\n");
-        exit(EXIT_FAILURE);
-    }
-
-    Element* courrant = liste->premier;
-
-    while (courrant != NULL)
-    {
-        afficherAeroport(courrant->data);
-        courrant = courrant->prochain;
-    }
-}
 
 //Sommet:
 
-Sommet* initialiserSommet(Aeroport* aeroport,Liste* successeurs)
+Sommet* initialiserSommet(void* data,Liste* successeurs,char* nom)
 {
-    if (aeroport == NULL)
+    if (data == NULL)
     {
-        printf("\nError: Assigning a NULL Aeroport to Sommet !\n");
+        printf("\nError: Assigning a NULL Data to Sommet !\n");
         exit(EXIT_FAILURE);
     }
-
     Sommet* nouveau = malloc(sizeof(Sommet));
+    char* nvnom = (char*)(malloc(sizeof(char)*strlen(nom)));
     memoryTest(nouveau);
+    memoryTest(nvnom);
 
-    nouveau->aeroport = aeroport;
+    strcpy(nvnom,nom);
+    nouveau->nom = nvnom;
+    nouveau->data = data;
     nouveau->liaisons = successeurs;
     nouveau->marque = 0;
 
@@ -83,8 +49,8 @@ void afficherSommet(Sommet* sommet)
         exit(EXIT_FAILURE);
     }
 
-    printf("\nSommet %s:",nomSom(sommet));
-    afficherAeroport(sommet->aeroport);
+    printf("\nSommet %s:",sommet->nom);
+    AFFICHER_DATA(sommet->data);
     afficherListe_Successeur(sommet->liaisons);
     if (sommet->marque)
     {
@@ -109,7 +75,7 @@ Sommet* chercherSommet_Successeur(Liste* liste_sommet,char* nom)
     Element* courrant = liste_sommet->premier;
     Sommet* som_courrant = courrant->data;
 
-    while (courrant != NULL && strstr(nom,nomSom(som_courrant)) == NULL)
+    while (courrant != NULL && strstr(nom,(som_courrant->nom)) == NULL)
     {
         courrant = courrant->prochain;
         if (courrant != NULL){som_courrant = courrant->data;}
@@ -174,7 +140,7 @@ void afficherSuccesseur(Successeur* successeur)
     }
 
     printf("\n");
-    printf("Sommet representer: %s\n",nomSuc(successeur));
+    printf("Sommet representer: %s\n",successeur->sommet_representer->nom);
     printf("Cout du deplacement: %d\n",coutSuc(successeur));
 }
 
@@ -254,22 +220,20 @@ void afficherListe_Successeur(Liste* liste)
 
 //Autre:
 
-Liste* lectureSommets(const char *faeroport)
+Liste* lectureSommets(const char *fsommet)
 {
     Liste* sommets = initialiserListe();
-    char iata[4];
-    char ville[50];
-    char pays[50];
+    VARIABLE_SOMMET_DEF
     FILE* file = NULL;
-    file = fopen(faeroport,"r+");
+    file = fopen(fsommet,"r+");
     if (file == NULL)
     {
         printf("\nError: Invalid file!!!\n");
         exit(EXIT_FAILURE);
     }
-    while (fscanf(file,"%4s %50s %50s",iata,ville,pays) != EOF)
+    while (fscanf(file,FORME_SOMMET,VARIABLE_SOMMET_USE) != EOF)
     {
-        ajouterElementListe(sommets,(initialiserSommet(initialiserAeroport(iata,ville,pays),NULL)));
+        ajouterElementListe(sommets,(initialiserSommet(INNITIALISER_DATA,NULL,CODE_SOMMET)));
     }
     fclose(file);
     return sommets;

@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdarg.h>
 
 void viderBuffer()
 {
@@ -34,12 +35,19 @@ char* readline(FILE* file)
     return ligne;
 }
 
+void testprint(const char* fforme,...)
+{
+    va_list parametre;
+    va_start(a);
+    printf(fforme,);
+}
+
 int main(int argc, char const *argv[])
 {
-    FILE* file = NULL;
-    file = fopen("liaisons-new.txt","r");
-    char* x = readline(file);
-    while (x != NULL) {x = readline(file);}
-    fclose(file);
+    // FILE* file = NULL;
+    // file = fopen("liaisons-new.txt","r");
+    // char* x = readline(file);
+    // while (x != NULL) {x = readline(file);}
+    // fclose(file);
     return 0;
 }
