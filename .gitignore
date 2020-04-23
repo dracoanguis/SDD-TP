@@ -4,3 +4,6 @@
 *.zip
 *.xlsx
 *.json
+.vscode/tasks.json
+.vscode/launch.json
+TP4/test.c
