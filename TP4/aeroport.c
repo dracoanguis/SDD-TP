@@ -83,6 +83,12 @@ int main(int argc, char const *argv[])
     sommets = lectureSommets("aeroport.txt");
     lectureSuccesseurs("liaisons-new.txt",sommets);
     afficherListe_Sommet(sommets);
+    int taille = compterElementListe(sommets);
+    int* matrix = calloc(taille*taille,sizeof(int));
+    remplirMatrice(matrix,taille);
+    afficherMatrice(matrix,taille);
+    printf("\n-------------------------------------\n");
+    remplirMatriceGraph(sommets,matrix,taille);
     return 0;
 }
 

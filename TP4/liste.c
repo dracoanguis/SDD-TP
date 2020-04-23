@@ -15,6 +15,16 @@ Liste* initialiserListe()
     return nouveau;
 }
 
+Pile* initialiserPile()
+{
+    Pile* nouveau = malloc(sizeof(Pile));
+    memoryTest(nouveau);
+
+    nouveau->premier = NULL;
+
+    return nouveau;  
+}
+
 void ajouterElementListe(Liste* liste,void* element)
 {
     Element* nouveau = malloc(sizeof(Element));
@@ -44,24 +54,80 @@ void ajouterElementListe(Liste* liste,void* element)
     }
 }
 
-void supprimerElementListe(Liste* liste)
+void ajouterElementPile(Pile* pile,void* element)
 {
-    Element* courrant = liste->premier;
-
-    if (liste == NULL)
+    if (pile == NULL)
     {
-        printf("\nError: Supressing element to non-existing Liste_Aeropot!!!\n");
+        printf("\nError: Adding Element to a non-existing Pile!\n");
+        exit(EXIT_FAILURE);
+    }
+
+    Element* nouveau = malloc(sizeof(Element));
+    memoryTest(nouveau);
+
+    nouveau->data = element;
+    nouveau->prochain = pile->premier;
+    pile->premier = nouveau;
+}
+
+void supprimerElementPile(Pile* pile)
+{
+    Element* courrant = pile->premier;
+
+    if (pile == NULL)
+    {
+        printf("\nError: Supressing element to non-existing Pile!!!\n");
         exit(EXIT_FAILURE);
     }
 
     if (courrant == NULL)
     {
-        printf("\nSupressing element to empty list suppressing list instead!!!\n");
-        free(liste);
+        printf("\nSupressing element to empty Pile suppressing Pile instead!!!\n");
+        free(pile);
     } else {
-        liste->premier = courrant->prochain;
+        pile->premier = courrant->prochain;
         free(courrant);
     }
+}
+
+void supprimerElementFile(Liste* pile)
+{
+    Element* courrant = pile->premier;
+
+    if (pile == NULL)
+    {
+        printf("\nError: Supressing element to non-existing Liste!!!\n");
+        exit(EXIT_FAILURE);
+    }
+
+    if (courrant == NULL)
+    {
+        printf("\nSupressing element to empty Liste suppressing Liste instead!!!\n");
+        free(pile);
+    } else {
+        pile->premier = courrant->prochain;
+        free(courrant);
+    }
+}
+
+int compterElementListe(Liste* liste)
+{
+    if (liste == NULL)
+    {
+        printf("\nError: Counting a non-existing List !\n");
+        exit(EXIT_FAILURE);
+    }
+
+    Element* courrant = liste->premier;
+    int nombre = 0;
+
+    while (courrant != NULL)
+    {
+        nombre++;
+        courrant = courrant->prochain;
+    }
+    
+    return nombre;
 }
 
 #endif // !LISTE_C

@@ -64,11 +64,19 @@ void lectureSuccesseurs(const char* fsuccesseur,Liste* liste_sommet);
 //Groupe de fonction pour fonction de création de liste successeur:
 
 //Cherche le Sommet representer par un successeur a partir du nom de celui-ci (code iata).
-Sommet* chercherSommet_Successeur(Liste* liste_sommet,char* nom);
+Sommet* chercherSommet(Liste* liste_sommet,char* nom);
 //Donne le Successeur a partir d'un bloc successeur (ex: "LHR.45").
 Successeur* lectureBlocSuccesseur(char* bloc, Liste* liste_sommet);
 //Donne une liste de successeur a partir d'une ligne d'information en Bloc.
 Liste* lectureLigneSuccesseur(char ligne[], Liste* liste_sommet);
 //Lis une ligne dans un fichier.
 char* readline(FILE* file);
+
+//Algorithme de parcour de Graph
+
+//Remet les marquage de sommet a 0.
+void nettoyerGraph(Liste* graph);
+//
+void parcourirBFS(Liste* graph, char* clef);
+
 #endif // !GRAPH_H
