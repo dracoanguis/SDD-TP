@@ -76,7 +76,26 @@ char* readline(FILE* file);
 
 //Remet les marquage de sommet a 0.
 void nettoyerGraph(Liste* graph);
-//
+//Parcour en Breadth-First.
 void parcourirBFS(Liste* graph, char* clef);
+//Paroure en Deph-Firts.
+void parcourirDFS(Liste* graph, char* clef);
+
+
+//Groupe de fonction pour Dijkstra
+
+//Cherche le numéro d'un Sommet a partie de son nom.
+int checherNombreSommet(Liste* liste_sommet,char* nom);
+
+/*Devenu inutile avec dernière modification
+//Affiche un tableau de int.
+void afficherMatrice(int* matrice,int taille);
+//Remplis un tableau de int avec des -1 (infinie pour l'algorithme)
+void remplirMatrice(int* matrice,int taille);
+//Remplis un tableau avec le poids des liaisons
+void remplirMatriceGraph(Liste* graph,int* matrice,int taille);
+//Affiche le chemin le plus court chemin entre deux sommet.
+void cheminDijkstraGraph(Liste* graph,char* depart,char* destination);
+*/
 
 #endif // !GRAPH_H

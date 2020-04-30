@@ -9,6 +9,7 @@
 #define AFFICHER_DATA(aeroport) afficherAeroport(aeroport)
 #define CODE_SOMMET iata
 #include "graph.c"
+#include <malloc.h>
 
 
 //Aeroports:
@@ -56,6 +57,7 @@ void afficherListe_Aeroport(Liste* liste)
     }
 }
 
+//Fonction devenu inutile
 // Liste* lectureAeroports(const char* faeroport)
 // {
 //     Liste* aeroports = initialiserListe();
@@ -82,14 +84,17 @@ int main(int argc, char const *argv[])
     Liste* sommets = initialiserListe();
     sommets = lectureSommets("aeroport.txt");
     lectureSuccesseurs("liaisons-new.txt",sommets);
+    printf("Exemple d'affichage d'un graph Sommet par Sommet :\n");
     afficherListe_Sommet(sommets);
-    int taille = compterElementListe(sommets);
-    int* matrix = calloc(taille*taille,sizeof(int));
-    remplirMatrice(matrix,taille);
-    afficherMatrice(matrix,taille);
-    printf("\n-------------------------------------\n");
-    remplirMatriceGraph(sommets,matrix,taille);
-    return 0;
+    printf("\nExemplde de parcour BFS dans l'ordre de traitement en partant de MXP, Milan.\n");
+    parcourirBFS(sommets,"MXP");
+    printf("\nExemplde de parcour DFS dans l'ordre de traitement en partant de MXP, Milan.\n");
+    parcourirDFS(sommets,"MXP");
+
+
+    printf("\nDijkstra:\n");
+    Dijkstra(sommets,"LHR","CDG");
+
 }
 
 

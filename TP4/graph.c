@@ -19,7 +19,6 @@
 #define CASE(ligne,colonne,taille) (sizeof(int)*taille*ligne + sizeof(int)*colonne)
 #define MATRICE(matrice,ligne,colonne,taille) *(matrice + CASE(ligne,colonne,taille))
 
-
 //Sommet:
 
 Sommet* initialiserSommet(void* data,Liste* successeurs,char* nom)
@@ -168,7 +167,6 @@ Successeur* lectureBlocSuccesseur(char bloc[], Liste* liste_sommet)
         printf("\nError: Can't initiate Successeur from bloc !\n");
         exit(EXIT_FAILURE);
     }
-    
     return retour;
 }
 
@@ -192,14 +190,15 @@ Liste* lectureLigneSuccesseur(char ligne[], Liste* liste_sommet)
     ajouterElementListe(successeurs,lectureBlocSuccesseur(line,liste_sommet));
     while (line != NULL)
     {
-        strcpy(lnbre,(base + (1 + strlen(line))*sizeof(char)));
-        lnbre = strtok(lnbre," ");
+        strcpy(line,(base + ( strlen(lnbre) + 1)*sizeof(char)));
         line = strtok(line," ");
         if (strchr(base,' ') == NULL)
         {
             return successeurs;
         }
-        strcpy(base,(base + (1 + strlen(line))*sizeof(char)));
+        strcpy(base,(base + (strlen(lnbre) + 1)*sizeof(char)));
+        strcpy(lnbre,(base));
+        lnbre = strtok(lnbre," ");
         ajouterElementListe(successeurs,lectureBlocSuccesseur(line,liste_sommet));
     }
 }
@@ -373,7 +372,7 @@ void parcourirBFS(Liste* graph, char* clef )
     }
     printf("Fin\n");
     printf("Fin de l'algorithm BFS\n");
-}
+} 
 
 void parcourirDFS(Liste* graph, char* clef )
 {
@@ -443,13 +442,23 @@ int chercherNombreSommet(Liste* liste_sommet,char* nom)
     return nombre;
 }
 
+/*Devenu inutile avec léa modification de Dijkstra
 void afficherMatrice(int* matrice,int taille)
 {
+    printf("\t");
     for (int i = 0; i < taille; i++)
     {
+        printf("\t%d:",i);
+    }
+
+    printf("\n");
+    
+    for (int i = 0; i < taille; i++)
+    {
+        printf("\t%d:",i);
         for (int e = 0; e < taille; e++)
         {
-            printf("\t%d",MATRICE(matrice,i,e,taille));
+            printf("\t|%d|",MATRICE(matrice,i,e,taille));
         }
         printf("\n");
     }
@@ -461,11 +470,17 @@ void remplirMatrice(int* matrice,int taille)
     {
         for (int e = 0; e < taille; e++)
         {
-            MATRICE(matrice,i,e,taille) = -1;
+            if (e != i)
+            {
+                MATRICE(matrice,i,e,taille) = -1;
+            } else
+            {
+                MATRICE(matrice,i,e,taille) = 0;
+            }
+            
         }
     }
 }
-
 
 void remplirMatriceGraph(Liste* graph,int* matrice,int taille)
 {
@@ -484,27 +499,170 @@ void remplirMatriceGraph(Liste* graph,int* matrice,int taille)
         }
         courrant = courrant->prochain;
     }
-    afficherMatrice(matrice,taille);
+}
+*/
+
+/*
+void remplirTableauGraph(Liste* graph,Sommet* som_courrant,int* tableau)
+{
+    int ligne = chercherNombreSommet(graph,som_courrant->nom);
+    Element* succes = som_courrant->liaisons->premier;
+    while (succes != NULL)
+    {
+        Successeur* suc_courrant = succes->data;
+        *(tableau + sizeof(int)*chercherNombreSommet(graph,suc_courrant->sommet_representer->nom)) = suc_courrant->cout;
+        succes = succes->prochain;
+    }
+
+}
+*/
+
+// void cheminDijkstraGraph(Liste* graph,char* depart, char* destination)
+// {
+//     if (graph == NULL || graph->premier == NULL)
+//     {
+//         printf("\nError: Trying to evaluate a non-existing or empty Graph !\n");
+//         exit(EXIT_FAILURE);
+//     }
+    
+//     nettoyerGraph(graph);
+//     int taille = compterElementListe(graph);
+//     int* adjacence = calloc(taille*taille,sizeof(int));
+//     int* 
+
+//     remplirMatrice(adjacence,taille);
+//     remplirMatriceGraph(graph,adjacence,taille);
+
+//     Sommet* courrant = chercherSommet(graph,depart);//Première node
+//     courrant->marque = 1;//On marque pour dire visiter
+//     char* chemin = calloc(strlen(courrant->nom)*taille,sizeof(char));//on fait un tableau qui contient le chemin aui fait la taille maximum du graph.
+    
+    
+// }
+
+// int* trouverMinimumTableau(int* tableau,int taille)
+// {
+//     int minimum;
+//     int* minimum_pos;
+//     if( *(tableau) != 0 ) {minimum = *(tableau); minimum_pos = tableau;}
+//     else {minimum = *(tableau + taille*sizeof(int)); minimum_pos = (tableau + taille*sizeof(int));}
+    
+//     for (int i = 0; i < taille; i++)
+//     {
+//         if (*(tableau + i*sizeof(int)) < minimum && *(tableau + i*sizeof(int)) != 0) {minimum = *(tableau + i*sizeof(int)); minimum_pos}
+//     }
+    
+//     return minimum
+// }
+
+void afficherTableau(int* tableau,int taille)
+{
+    printf("\nTableau : ");
+    for (int i = 0; i < taille; i++)
+    {
+        printf("\t%d",*(tableau + i*sizeof(int)));
+    }
+    printf("\n");
+}
+
+void recurcionDij(Liste* graph,Sommet* actuel,int* cout,int* parent,Pile* suite)
+{
+    if (suite == NULL || suite->premier == NULL) {printf("\nError"); exit(EXIT_FAILURE);}
+    actuel->marque = 1; //On marque actuel, utiliser pour l'initialisation.
+    supprimerElementPile(suite);//On retire actuel
+    int cout_som = *(cout + chercherNombreSommet(graph,actuel->nom)*sizeof(int));//Forcement différent de -1
+    Element* courrant = actuel->liaisons->premier;
+    Successeur* prochain = NULL;
+    int cout_prochain;
+
+    while (courrant != NULL)
+    {
+        Successeur* suc_cur = courrant->data;
+        if (suc_cur->sommet_representer->marque == 0)
+        {
+            int num_suc = chercherNombreSommet(graph,suc_cur->sommet_representer->nom);
+            if (*(cout + num_suc*sizeof(int)) == -1 || *(cout + num_suc*sizeof(int)) > (suc_cur->cout + cout_som))
+            {
+                *(cout + num_suc*sizeof(int)) = (suc_cur->cout + cout_som);
+                *(parent + num_suc*sizeof(int*)) = chercherNombreSommet(graph,actuel->nom);
+
+                if (prochain == NULL || cout_prochain > suc_cur->cout)
+                {
+                    prochain = suc_cur;
+                    cout_prochain = suc_cur->cout;
+                }
+            }
+        }
+        courrant = courrant->prochain;
+    }
+
+    //Empilage des nodes
+    courrant = actuel->liaisons->premier;
+    while (courrant != NULL)
+    {
+        Successeur* suc_cur = courrant->data;
+        if (suc_cur->sommet_representer->marque == 0 && suc_cur != prochain)
+        {
+            ajouterElementPile(suite,suc_cur->sommet_representer);
+            suc_cur->sommet_representer->marque = 1;//On marque les empilés
+        }
+        courrant = courrant->prochain;
+    }
+    
+    if (suite == NULL || suite->premier == NULL)
+    {
+        exit(EXIT_SUCCESS);
+    }
+    else
+    {
+        recurcionDij(graph,prochain->sommet_representer,cout,parent,suite);
+    }
     
 }
 
-void cheminDjikstraGRAPH(Liste* graph,char* depart, char* destination)
+void Dijkstra(Liste* graph,char* depart,char* destination)
 {
     if (graph == NULL || graph->premier == NULL)
     {
         printf("\nError: Trying to evaluate a non-existing or empty Graph !\n");
         exit(EXIT_FAILURE);
     }
-    
 
+    nettoyerGraph(graph);//Retire les marques de visites.
     int taille = compterElementListe(graph);
-    int* matrix = calloc(taille*taille,sizeof(int));
-    
+    Sommet* premier = chercherSommet(graph,depart);//Première node.
+    int num_courrant = chercherNombreSommet(graph,depart);//Num première node.   
+    int* cout = (int*)malloc(taille*sizeof(int));//Tableau créer en fonction du depart.
+    int* parent = (int*)malloc(taille*sizeof(int*));//les precedent pour lire le chemin
+        Pile* suite = initialiserPile();//On crée la pile qui contient la suite
+    ajouterElementPile(suite,premier);//on ajoute le premier element pour eviter la condition de fin a la première boucle
+
+    for (int i = 0; i < (taille); i++)//On fixe les cout d'origine
+    {
+        *(cout + i*sizeof(int)) = -1;
+        if (i == num_courrant) {*(cout + i*sizeof(int)) = 0;}
+    }
+
+    afficherTableau(cout,taille);
 
 
+    for (int i = 0; i < taille; i++)
+    {
+        *(parent + i*sizeof(int*)) = -1;
+    }
     
-    
-    
-    
+    recurcionDij(graph,premier,cout,parent,suite);
+
+    int num_chemin = chercherNombreSommet(graph,destination);
+    printf("\n");
+    while (num_chemin != -1)
+    {
+        printf("%d ->",num_chemin);
+        num_chemin = *(parent + num_chemin*sizeof(int));
+    }
+    printf("\n");
+    printf("Ahhhhhhh");
+
 }
+
 #endif // !GRAPH_C
