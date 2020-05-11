@@ -39,5 +39,7 @@ char* readline(FILE* file)
 
 int main(int argc, char const *argv[])
 {
-
+    char* a = "apprentissage";
+    int b = sizeof(*a);
+    printf("%d\n", sizeof(a)/sizeof(char));
 }

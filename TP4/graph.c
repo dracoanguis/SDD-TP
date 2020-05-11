@@ -565,7 +565,7 @@ void afficherTableau(int* tableau,int taille)
     printf("\n");
 }
 
-void recurcionDij(Liste* graph,Sommet* actuel,int* cout,int* parent,Pile* suite)
+Sommet* recurcionDij(Liste* graph,Sommet* actuel,int* cout,int* parent,Pile* suite)
 {
     if (suite == NULL || suite->premier == NULL) {printf("\nError"); exit(EXIT_FAILURE);}
     actuel->marque = 1; //On marque actuel, utiliser pour l'initialisation.
@@ -611,11 +611,11 @@ void recurcionDij(Liste* graph,Sommet* actuel,int* cout,int* parent,Pile* suite)
     
     if (suite == NULL || suite->premier == NULL)
     {
-        exit(EXIT_SUCCESS);
+        return NULL;
     }
     else
     {
-        recurcionDij(graph,prochain->sommet_representer,cout,parent,suite);
+        return prochain->sommet_representer;
     }
     
 }
@@ -632,26 +632,38 @@ void Dijkstra(Liste* graph,char* depart,char* destination)
     int taille = compterElementListe(graph);
     Sommet* premier = chercherSommet(graph,depart);//Première node.
     int num_courrant = chercherNombreSommet(graph,depart);//Num première node.   
-    int* cout = (int*)malloc(taille*sizeof(int));//Tableau créer en fonction du depart.
-    int* parent = (int*)malloc(taille*sizeof(int*));//les precedent pour lire le chemin
-        Pile* suite = initialiserPile();//On crée la pile qui contient la suite
+    int* cout = (int*)malloc(2*(taille + 1)*sizeof(int));//Tableau créer en fonction du depart.
+    int* parent = (int*)malloc(2*(taille + 1)*sizeof(int));//les precedent pour lire le chemin
+    Pile* suite = initialiserPile();//On crée la pile qui contient la suite
     ajouterElementPile(suite,premier);//on ajoute le premier element pour eviter la condition de fin a la première boucle
+    printf("%x\n",sizeof(long long));
+    printf("%x",(sizeof(long int)));
 
-    for (int i = 0; i < (taille); i++)//On fixe les cout d'origine
+    for (int i = 0; i < (taille - 1); i++)//On fixe les cout d'origine
     {
         *(cout + i*sizeof(int)) = -1;
+        *(parent + i*sizeof(int)) = -2;
         if (i == num_courrant) {*(cout + i*sizeof(int)) = 0;}
     }
 
-    afficherTableau(cout,taille);
+    afficherTableau(cout,2*(taille + 1));
+    afficherTableau(parent,2*(taille + 1));
 
+    // for (int i = 0; i < (taille - 1); i++)
+    // {
+    //     *(parent + i*sizeof(int*)) = -1;
+    // }
 
-    for (int i = 0; i < taille; i++)
+    Sommet* courrant = premier;
+    
+    while (courrant != NULL)
     {
-        *(parent + i*sizeof(int*)) = -1;
+        printf("\n------------------");
+        afficherTableau(cout,(taille + 1));
+        afficherTableau(parent,(taille + 1));
+        courrant = recurcionDij(graph,courrant,cout,parent,suite);
     }
     
-    recurcionDij(graph,premier,cout,parent,suite);
 
     int num_chemin = chercherNombreSommet(graph,destination);
     printf("\n");
@@ -661,7 +673,6 @@ void Dijkstra(Liste* graph,char* depart,char* destination)
         num_chemin = *(parent + num_chemin*sizeof(int));
     }
     printf("\n");
-    printf("Ahhhhhhh");
 
 }
 
