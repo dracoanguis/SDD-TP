@@ -83,9 +83,8 @@ void remplissageTableHacheSimple(Hache table[],int tailletable,Liste* liste)
     for (int i = 0; i < tailleliste; i++)
     {
         ELEMENT_TYPE elem_val = courrant->data;
-        char clef[] = CHEMIN_CLEF(elem_val);
         Hache nouveau = innitialiserHache(elem_val);
-        nouveau.hache = coderMotNombre(clef,tailletable);
+        nouveau.hache = coderMotNombreSimple(CHEMIN_CLEF(elem_val),tailletable);
         int place = nouveau.hache;
 
         while (table[place].hache != -1)
@@ -146,14 +145,13 @@ void remplissageTableHacheLinear(Hache table[],int tailletable,Liste* liste)
     for (int i = 0; i < tailleliste; i++)
     {
         ELEMENT_TYPE elem_val = courrant->data;
-        char clef[] = CHEMIN_CLEF(elem_val);
         Hache nouveau = innitialiserHache(elem_val);
-        nouveau.hache = coderMotNombreLinear(clef,tailletable,nouveau.essaie);
+        nouveau.hache = coderMotNombreLinear(CHEMIN_CLEF(elem_val),tailletable,nouveau.essaie);
 
         while (table[nouveau.hache].hache != -1)
         {
             nouveau.essaie++;
-            nouveau.hache = coderMotNombreLinear(clef,tailletable,nouveau.essaie);
+            nouveau.hache = ((nouveau.hache + nouveau.essaie)%tailletable);
         }
         table[nouveau.hache] = nouveau;
         courrant = courrant->prochain;
@@ -204,14 +202,17 @@ void remplissageTableHacheQuadratique(Hache table[],int tailletable,Liste* liste
     for (int i = 0; i < tailleliste; i++)
     {
         ELEMENT_TYPE elem_val = courrant->data;
-        char clef[] = CHEMIN_CLEF(elem_val);
         Hache nouveau = innitialiserHache(elem_val);
-        nouveau.hache = coderMotNombreQuadratique(clef,tailletable,nouveau.essaie);
+        nouveau.hache = coderMotNombreQuadratique(CHEMIN_CLEF(elem_val),tailletable,nouveau.essaie);
 
         while (table[nouveau.hache].hache != -1)
         {
             nouveau.essaie++;
-            nouveau.hache = coderMotNombreQuadratique(clef,tailletable,nouveau.essaie);
+            nouveau.hache = (((nouveau.hache) + ((2*nouveau.essaie + 3*nouveau.essaie*nouveau.essaie)%tailletable))%tailletable);
+            if (nouveau.hache < 0)
+            {
+                nouveau.hache = 0;//Valeur de défaut pour remplissage pour eviter des overflow.
+            }
         }
         table[nouveau.hache] = nouveau;
         courrant = courrant->prochain;
@@ -255,15 +256,23 @@ void remplissageTableHacheDouble(Hache table[],int tailletable,Liste* liste)
     for (int i = 0; i < tailleliste; i++)
     {
         ELEMENT_TYPE elem_val = courrant->data;
-        char clef[] = CHEMIN_CLEF(elem_val);
-        char clefsec[] = CHEMIN_CLEF_B(elem_val);
         Hache nouveau = innitialiserHache(elem_val);
-        nouveau.hache = coderMotNombreDouble(clef,clefsec,tailletable,nouveau.essaie);
+        nouveau.hache = coderMotNombreDouble(CHEMIN_CLEF(elem_val),CHEMIN_CLEF_B(elem_val),tailletable,nouveau.essaie);
+        int hacheb = coderMotNombreSimple(CHEMIN_CLEF_B(elem_val),tailletable);
+        if (hacheb == 0)
+        {
+            hacheb = 1;
+        }
 
         while (table[nouveau.hache].hache != -1)
         {
             nouveau.essaie++;
-            nouveau.hache = coderMotNombreDouble(clef,clefsec,tailletable,nouveau.essaie);
+            nouveau.hache = ((nouveau.hache + nouveau.essaie*hacheb)%tailletable);
+            if (nouveau.hache < 0)
+            {
+                nouveau.hache = 0;//Valeur de défaut pour remplissage pour eviter des overflow.
+                hacheb = 1;//On passe en linéaire car sinon on tombe dans des boucles.
+            }
         }
         table[nouveau.hache] = nouveau;
         courrant = courrant->prochain;
@@ -287,13 +296,19 @@ void statistiques(Hache table[],int taille,Liste* objet,char typeobjet[],char cl
     }
 
     int nbrobjet = compterElementListe(objet); 
-    int completion = (int)((nbrobjet/taille)*100);
+    double completion = (double)((((double)nbrobjet)/((double)taille))*100);
 
     FILE* log = fopen("statistique.log","a+");
+    
+    if (log == NULL)
+    {
+        printf("\nError: impossible to open \"statistique.log\"!\n");
+        exit(EXIT_FAILURE);
+    }
 
-    fprintf(log,"\nStats: Hach %s",*typehache);
-    fprintf(log,"\nType d'objet: %s;    Clef de hache: %s;\n    Nombre d'objet: %d;    Origine des objets: %s;",*typeobjet,*clef,nbrobjet,*fileobjet);
-    fprintf(log,"\nTaile de la table: %d;   Completion de la table: %d",taille,completion);
+    fprintf(log,"\nStats: Hach %s",typehache);
+    fprintf(log,"\nType d'objet: %s;    Clef de hache: %s;    \nNombre d'objet: %d;    Origine des objets: %s;",typeobjet,clef,nbrobjet,fileobjet);
+    fprintf(log,"\nTaile de la table: %d;   Completion de la table: %lf",taille,completion);
     fprintf(log,"\nNombre de collision: %d;",collision);
     fprintf(log,"\n--------------------------------------------------------------------------------------------");
     fclose(log);

@@ -12,8 +12,8 @@ int main(int argc, char const *argv[])
     const int taille = 100000;
     remplissageTableHacheVide(table,taille);
     printf("\nCreation d'une table de Hache vide de taille: %d",taille);
-    const char fichier[] = "TP5.passagers-100000.txt";
-    printf("\nCreation d'une Liste de Personnes a partir de %s",*fichier);
+    char fichier[] = "TP5.passagers-100000.txt";
+    printf("\nCreation d'une Liste de Personnes a partir de %s",fichier);
     Liste* personnes = listerPersonne(fichier);
     printf("\nRemplissage de la table avec des Hache Linear");
     remplissageTableHacheLinear(table,taille,personnes);
