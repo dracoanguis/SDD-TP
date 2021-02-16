@@ -1,0 +1,99 @@
+
+Stats: Hach Linear
+Type d'objet: Personne;    Clef de hache: Prenom;    
+Nombre d'objet: 100000;    Origine des objets: TP5.passagers-100000.txt;
+Taile de la table: 100000;   Completion de la table: 100
+Nombre de collision: 678072747;
+--------------------------------------------------------------------------------------------
+"Une modification a tout changer et as beaucoup améliorer"
+Stats: Hach Linear
+Type d'objet: Personne;    Clef de hache: Prenom;    
+Nombre d'objet: 100000;    Origine des objets: TP5.passagers-100000.txt;
+Taile de la table: 100000;   Completion de la table: 100
+Nombre de collision: 24710819; 
+--------------------------------------------------------------------------------------------
+Stats: Hach Linear
+Type d'objet: Personne;    Clef de hache: Prenom;    
+Nombre d'objet: 100000;    Origine des objets: TP5.passagers-100000.txt;
+Taile de la table: 100000;   Completion de la table: 100
+Nombre de collision: 24710819;
+--------------------------------------------------------------------------------------------
+"Il y a un problème en quadratique au-alentour des 26000 essaie de placement qui fait cracher"
+Stats: Hach Linear
+Type d'objet: Personne;    Clef de hache: Prenom;    
+Nombre d'objet: 100000;    Origine des objets: TP5.passagers-100000.txt;
+Taile de la table: 100000;   Completion de la table: 100
+Nombre de collision: 24710819;
+--------------------------------------------------------------------------------------------
+Stats: Hach Quadratique
+Type d'objet: Personne;    Clef de hache: Prenom;    
+Nombre d'objet: 100000;    Origine des objets: TP5.passagers-100000.txt;
+Taile de la table: 100000;   Completion de la table: 100
+Nombre de collision: 16440662;
+--------------------------------------------------------------------------------------------
+"Il y a le meme problème sur le hachage Double mais au alentour de 51000 essaie de placement"
+"Pour corriger les deux problème on fixe les hache a 0 en cas de overflow et on reutilise la méthode demander(quadratique ou Double)"
+"Cette méthode ne fonctionne pas pour le double correction plus loin"
+Stats: Hach Linear
+Type d'objet: Personne;    Clef de hache: Prenom;    
+Nombre d'objet: 100000;    Origine des objets: TP5.passagers-100000.txt;
+Taile de la table: 100000;   Completion de la table: 100
+Nombre de collision: 24710819;
+--------------------------------------------------------------------------------------------
+Stats: Hach Quadratique
+Type d'objet: Personne;    Clef de hache: Prenom;    
+Nombre d'objet: 100000;    Origine des objets: TP5.passagers-100000.txt;
+Taile de la table: 100000;   Completion de la table: 100
+Nombre de collision: 16440662;
+--------------------------------------------------------------------------------------------
+Stats: Hach Linear
+Type d'objet: Personne;    Clef de hache: Prenom;    
+Nombre d'objet: 100000;    Origine des objets: TP5.passagers-100000.txt;
+Taile de la table: 100000;   Completion de la table: 100
+Nombre de collision: 24710819;
+--------------------------------------------------------------------------------------------
+Stats: Hach Quadratique
+Type d'objet: Personne;    Clef de hache: Prenom;    
+Nombre d'objet: 100000;    Origine des objets: TP5.passagers-100000.txt;
+Taile de la table: 100000;   Completion de la table: 100
+Nombre de collision: 16440662;
+--------------------------------------------------------------------------------------------
+"On modifie le hachage double pour eviter de tomber dans des boucles infinie, en cas de overflow on fait du hachage linéaire"
+Stats: Hach Linear
+Type d'objet: Personne;    Clef de hache: Prenom;    
+Nombre d'objet: 100000;    Origine des objets: TP5.passagers-100000.txt;
+Taile de la table: 100000;   Completion de la table: 100
+Nombre de collision: 24710819;
+--------------------------------------------------------------------------------------------
+Stats: Hach Quadratique
+Type d'objet: Personne;    Clef de hache: Prenom;    
+Nombre d'objet: 100000;    Origine des objets: TP5.passagers-100000.txt;
+Taile de la table: 100000;   Completion de la table: 100
+Nombre de collision: 16440662;
+--------------------------------------------------------------------------------------------
+Stats: Hach Double
+Type d'objet: Personne;    Clef de hache: Prenom puis Nom;    
+Nombre d'objet: 100000;    Origine des objets: TP5.passagers-100000.txt;
+Taile de la table: 100000;   Completion de la table: 100
+Nombre de collision: 185212237;
+--------------------------------------------------------------------------------------------
+"Le double hachage ne semble pas etre efficaces dans le cas d'une completion de 100"
+Stats: Hach Linear
+Type d'objet: Personne;    Clef de hache: Prenom;    
+Nombre d'objet: 100000;    Origine des objets: TP5.passagers-100000.txt;
+Taile de la table: 150000;   Completion de la table: 66.666667
+Nombre de collision: 22290530;
+--------------------------------------------------------------------------------------------
+Stats: Hach Quadratique
+Type d'objet: Personne;    Clef de hache: Prenom;    
+Nombre d'objet: 100000;    Origine des objets: TP5.passagers-100000.txt;
+Taile de la table: 150000;   Completion de la table: 66.666667
+Nombre de collision: 10158807;
+--------------------------------------------------------------------------------------------
+Stats: Hach Double
+Type d'objet: Personne;    Clef de hache: Prenom puis Nom;    
+Nombre d'objet: 100000;    Origine des objets: TP5.passagers-100000.txt;
+Taile de la table: 150000;   Completion de la table: 66.666667
+Nombre de collision: 1055291;
+--------------------------------------------------------------------------------------------
+"Le double hachage est beaucoup plus efficaces quand on a une table plus grande que le nombre d'objets"

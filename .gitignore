@@ -4,3 +4,10 @@
 *.zip
 *.xlsx
 *.json
+.vscode/tasks.json
+.vscode/launch.json
+TP4/test.c
+.vscode/launch.json
+.vscode/tasks.json
+TP4/aeroports.png
+TP4/Untitled Diagram.png

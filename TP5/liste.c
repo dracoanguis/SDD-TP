@@ -62,7 +62,7 @@ void ajouterElementPile(Pile* pile,void* element)
         exit(EXIT_FAILURE);
     }
 
-    Element* nouveau = malloc(sizeof(Element) + 1);
+    Element* nouveau = malloc(sizeof(Element));
     memoryTest(nouveau);
 
     nouveau->data = element;
@@ -72,7 +72,7 @@ void ajouterElementPile(Pile* pile,void* element)
 
 void supprimerElementPile(Pile* pile)
 {
-    // courrant = pile->premier;
+    Element* courrant = pile->premier;
 
     if (pile == NULL)
     {
@@ -80,13 +80,13 @@ void supprimerElementPile(Pile* pile)
         exit(EXIT_FAILURE);
     }
 
-    if (pile->premier == NULL)
+    if (courrant == NULL)
     {
         printf("\nSupressing element to empty Pile suppressing Pile instead!!!\n");
         free(pile);
     } else {
-        pile->premier = pile->premier->prochain;
-        //free(courrant);
+        pile->premier = courrant->prochain;
+        free(courrant);
     }
 }
 

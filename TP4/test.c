@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdarg.h>
 
 void viderBuffer()
 {
@@ -34,12 +35,11 @@ char* readline(FILE* file)
     return ligne;
 }
 
+
+
 int main(int argc, char const *argv[])
 {
-    FILE* file = NULL;
-    file = fopen("liaisons-new.txt","r");
-    char* x = readline(file);
-    while (x != NULL) {x = readline(file);}
-    fclose(file);
-    return 0;
+    char* a = "apprentissage";
+    int b = sizeof(*a);
+    printf("%d\n", sizeof(a)/sizeof(char));
 }
